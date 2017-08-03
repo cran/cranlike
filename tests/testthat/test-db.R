@@ -15,9 +15,9 @@ test_that("db_all_packages", {
   db_file <- tempfile()
   on.exit(unlink(db_file))
   with_db(db_file, {
-    dbGetQuery(db, "CREATE TABLE packages (Package TEXT, Version TEXT)")
-    dbGetQuery(db, "INSERT INTO packages VALUES ('igraph', '1.0.0')")
-    dbGetQuery(db, "INSERT INTO packages VALUES ('wegraph', '1.0.1')")
+    dbExecute(db, "CREATE TABLE packages (Package TEXT, Version TEXT)")
+    dbExecute(db, "INSERT INTO packages VALUES ('igraph', '1.0.0')")
+    dbExecute(db, "INSERT INTO packages VALUES ('wegraph', '1.0.1')")
   })
   expect_equal(
     db_all_packages(db_file),
@@ -33,9 +33,9 @@ test_that("db_get_fields", {
   db_file <- tempfile()
   on.exit(unlink(db_file))
   with_db(db_file, {
-    dbGetQuery(db, "CREATE TABLE packages (Package TEXT, Version TEXT)")
-    dbGetQuery(db, "INSERT INTO packages VALUES ('igraph', '1.0.0')")
-    dbGetQuery(db, "INSERT INTO packages VALUES ('wegraph', '1.0.1')")
+    dbExecute(db, "CREATE TABLE packages (Package TEXT, Version TEXT)")
+    dbExecute(db, "INSERT INTO packages VALUES ('igraph', '1.0.0')")
+    dbExecute(db, "INSERT INTO packages VALUES ('wegraph', '1.0.1')")
   })
   expect_equal(
     db_get_fields(db_file),
@@ -52,7 +52,7 @@ test_that("create_db", {
 
 test_that("db_create_text_table", {
   res <- NULL
-  mockery::stub(db_create_text_table, 'dbGetQuery', function(x, y) res <<- y)
+  mockery::stub(db_create_text_table, 'dbExecute', function(x, y) res <<- y)
   db_create_text_table(NULL, "table", c("a", "b"), "b")
   expect_match(res, paste0(
     'CREATE TABLE table[(]\\s*"a" TEXT,\\s*"b" TEXT,',
