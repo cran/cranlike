@@ -23,10 +23,7 @@ create_empty_PACKAGES <- function(dir = ".", fields = NULL) {
   db_file <- get_db_file(dir)
 
   ## Create DB if needed
-  if (!file.exists(db_file)) create_db(db_file, fields = fields)
-
-  ## Write out new PACKAGES* files
-  write_packages_files(dir, db_file)
+  if (!file.exists(db_file)) create_db(dir, db_file, fields = fields)
 }
 
 #' Create or update PACKAGES* files for a CRAN-like repository
@@ -64,13 +61,10 @@ update_PACKAGES <- function(
   db_file <- get_db_file(dir)
 
   ## Create DB if needed
-  if (!file.exists(db_file)) create_db(db_file, fields = fields)
+  if (!file.exists(db_file)) create_db(dir, db_file, fields = fields)
 
   ## Update DB
   update_db(dir, db_file, fields, type)
-
-  ## Write out new PACKAGES* files
-  write_packages_files(dir, db_file)
 }
 
 #' Add R packages to the package database
@@ -98,19 +92,17 @@ add_PACKAGES <- function(files, dir = ".", fields = NULL) {
 
   db_file <- get_db_file(dir)
   fields <- get_fields(fields)
-  if (!file.exists(db_file)) create_db(db_file, fields = fields)
+  if (!file.exists(db_file)) create_db(dir, db_file, fields = fields)
 
   pkgs <- parse_package_files(full_files, md5s, fields)
   sql <- "DELETE FROM packages WHERE file = ?file"
-  with_db(db_file, {
+  with_db_lock(db_file, {
     for (file in full_files) {
       dbExecute(db, sqlInterpolate(db, sql, file = basename(file)))
     }
     insert_packages(db, pkgs)
+    write_packages_files(dir, db_file)
   })
-
-  ## Write out new PACKAGES* files
-  write_packages_files(dir, db_file)
 }
 
 #' Remove package from a package database
@@ -135,17 +127,17 @@ remove_PACKAGES <- function(files, dir = ".") {
   md5s <- md5sum(full_files)
 
   db_file <- get_db_file(dir)
-  with_db(db_file, {
+  with_db_lock(db_file, {
     sql <- "DELETE FROM packages WHERE MD5sum = ?md5"
     for (md5 in md5s) {
       "!DEBUG Removing `md5`"
       dbExecute(db, sqlInterpolate(db, sql, md5 = md5))
     }
+
+    ## Remove files
+    unlink(full_files)
+
+    ## Write out new PACKAGES* files
+    write_packages_files(dir, db_file)
   })
-
-  ## Remove files
-  unlink(full_files)
-
-  ## Write out new PACKAGES* files
-  write_packages_files(dir, db_file)
 }

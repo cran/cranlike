@@ -45,7 +45,12 @@ parse_package_files <- function(files, md5s, fields) {
 
 get_desc <- function(file) {
   tryCatch(
-    description$new(file),
+    {
+      desc <- description$new(file)
+      v <- desc$get("Version")
+      if (!is.na(v)) desc$set("Version", str_trim(v))
+      desc
+    },
     error = function(e) {
       warning(
         "Cannot extract valid DESCRIPTION, ", sQuote(file),

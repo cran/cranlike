@@ -30,7 +30,7 @@ test_that("write_package_files", {
 
   db_file <- get_db_file(dir)
   fields <- get_fields(NULL)
-  create_db(db_file, fields)
+  create_db(dir, db_file, fields)
   update_db(dir, db_file, fields, type = "source")
 
   write_packages_files(dir, db_file)
@@ -45,7 +45,8 @@ test_that("write_package_files", {
     as.data.frame(tab2, stringsAsFactors = FALSE)
   )
 
-  tab3 <- read.dcf(gzfile(file.path(dir, "PACKAGES")))
+  tab3 <- read.dcf(gz <- gzfile(file.path(dir, "PACKAGES")))
+  close(gz)
   expect_equal(tab2, tab3)
 
   tab4 <- readRDS(file.path(dir, "PACKAGES.rds"))
