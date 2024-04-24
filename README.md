@@ -3,12 +3,13 @@
 
 > Tools for CRAN-like Repositories
 
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Linux Build Status](https://travis-ci.org/r-hub/cranlike.svg?branch=master)](https://travis-ci.org/r-hub/cranlike)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/r-hub/cranlike?svg=true)](https://ci.appveyor.com/project/gaborcsardi/cranlike)
-[![](http://www.r-pkg.org/badges/version/cranlike)](http://www.r-pkg.org/pkg/cranlike)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cranlike)](http://www.r-pkg.org/pkg/cranlike)
-[![Coverage Status](https://img.shields.io/codecov/c/github/r-hub/cranlike/master.svg)](https://codecov.io/github/r-hub/cranlike?branch=master)
+<!-- badges: start -->
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![](https://www.r-pkg.org/badges/version/cranlike)](https://www.r-pkg.org/pkg/cranlike)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/cranlike)](https://www.r-pkg.org/pkg/cranlike)
+[![R-CMD-check](https://github.com/r-hub/cranlike/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-hub/cranlike/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/r-hub/cranlike/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-hub/cranlike?branch=main)
+<!-- badges: end -->
 
 A set of functions to manage CRAN-like repositories efficiently.
 This package is an alternative to `tools::write_PACKAGES`.
@@ -23,7 +24,7 @@ The `PACKAGES*` files are generated from the database.
 ## Installation
 
 ```r
-source("https://install-github.me/r-hub/cranlike")
+install.packages("cranlike")
 ```
 
 ## Usage
